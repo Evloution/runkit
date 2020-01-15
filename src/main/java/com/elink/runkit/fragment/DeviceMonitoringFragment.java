@@ -17,7 +17,6 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
@@ -26,7 +25,6 @@ import com.elink.runkit.adapter.MonitoringPointAdapter;
 import com.elink.runkit.bean.BaseDataListBean;
 import com.elink.runkit.bean.MonitoringPointBean;
 import com.elink.runkit.log.L;
-import com.elink.runkit.map.together.MapTogetherManager;
 import com.elink.runkit.presenter.MonitoringPointPresenter;
 import com.elink.runkit.util.ToastUtil;
 import com.elink.runkit.view.DataView;
@@ -99,6 +97,7 @@ public class DeviceMonitoringFragment extends Fragment {
         if (aMap == null) {
             aMap = fragmentDevicemonitoringMapview.getMap();
         }
+        aMap.getUiSettings().setMyLocationButtonEnabled(true); // 设置默认定位按钮是否显示，非必需设置。
         aMap.showIndoorMap(true); // 是否显示室内地图。 true：显示室内地图；false：不显示；
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是 false。
         aMap.moveCamera(CameraUpdateFactory.zoomTo(10)); // 设置地图缩放比例
@@ -173,7 +172,7 @@ public class DeviceMonitoringFragment extends Fragment {
                     monitoringPointAdapter = new MonitoringPointAdapter(getContext(), monitoringPointList);
                     devicelistListview.setAdapter(monitoringPointAdapter);
                 }
-                updateNormalMarkers();
+                updateNormalMarkers(monitoringPointList);
                 // 请求成功后取消刷新框
                 isCloseLoad(code);
             }
@@ -234,7 +233,7 @@ public class DeviceMonitoringFragment extends Fragment {
     /**
      * 更新普通网点数据
      */
-    private void updateNormalMarkers() {
+    private void updateNormalMarkers(List<MonitoringPointBean> monitoringPointList) {
         // 判断上一次更新marker操作的操作类型,若上次显示的是聚合网点,则先清空地图,然后清空网点信息,在刷新地图marker
         aMap.clear();
         markerMap.clear();
@@ -251,15 +250,17 @@ public class DeviceMonitoringFragment extends Fragment {
             return;
         }
         for (int i = 0; i < monitoringPointBeanList.size(); i++) {
-            MonitoringPointBean MonitoringPointBean = monitoringPointBeanList.get(i);
-            latLng = new LatLng(MonitoringPointBean.getLATITUDE(), MonitoringPointBean.getLONGITUDE());
+            MonitoringPointBean monitoringPointBean = monitoringPointBeanList.get(i);
+            L.e("getLATITUDE()：" + monitoringPointBean.getLATITUDE());
+            L.e("getLONGITUDE()" + monitoringPointBean.getLONGITUDE());
+            latLng = new LatLng(monitoringPointBean.getLATITUDE(), monitoringPointBean.getLONGITUDE());
             MarkerOptions options = new MarkerOptions();
             options.anchor(0.5f, 1.0f);
             options.position(latLng);
             options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_black_green_24dp));
 
             marker = aMap.addMarker(options);
-            marker.setObject(MonitoringPointBean);
+            marker.setObject(monitoringPointBean);
             marker.setZIndex(ORGZOON);
             marker.setPeriod(postion);
         }
