@@ -8,10 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
+import android.view.View;
 
 import com.elink.runkit.R;
-import com.elink.runkit.constants.Constants;
 import com.elink.runkit.fragment.DeviceMonitoringFragment;
 import com.elink.runkit.fragment.HomePageFragment;
 import com.elink.runkit.fragment.MyPageFragment;
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private ReportPoliceFragment reportPoliceFragment;
     private FragmentManager fm;
     private FragmentTransaction ft;
-    private FrameLayout frameLayout;
+    private BottomNavigationView navView;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -56,8 +55,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        Constants.ITEMICONSIZE = String.valueOf(navView.getItemIconSize());
+        navView = findViewById(R.id.nav_view);
         L.e("navView.getItemIconSize():" + navView.getItemIconSize());
         // 解决 BottomNavigationView 大于3个menu时文字不显示的问题
         navView.setLabelVisibilityMode(1);
@@ -76,6 +74,13 @@ public class MainActivity extends AppCompatActivity {
 
         ft.add(R.id.fragment_content, homePageFragment).commit();
         fragment = homePageFragment;
+
+        homePageFragment.setOnReportPoliceClick(new HomePageFragment.OnReportPoliceClick() {
+            @Override
+            public void onReportPoliceClick(View view) {
+                switchFragment(reportPoliceFragment);
+            }
+        });
     }
 
     /**

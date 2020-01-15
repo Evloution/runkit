@@ -4,6 +4,7 @@ import com.elink.runkit.bean.BaseBean;
 import com.elink.runkit.bean.BaseDataListBean;
 import com.elink.runkit.bean.HistogramBean;
 import com.elink.runkit.bean.MonitoringPointBean;
+import com.elink.runkit.bean.MonitoringPointDetailsBean;
 import com.elink.runkit.bean.PointsInfoBean;
 import com.elink.runkit.bean.ReportPoliceBean;
 
@@ -40,6 +41,15 @@ public interface RetrofitApi {
     @POST("connector/getPointList")
     @FormUrlEncoded
     Observable<BaseDataListBean<MonitoringPointBean>> getPointList(@Field("pointname") String pointname, @Field("pointip") String pointip, @Field("limit") String limit, @Field("page") String page);
+
+    /**
+     * 监测点详情信息
+     * @param id 监测点的id
+     * @return
+     */
+    @POST("connector/getPointById")
+    @FormUrlEncoded
+    Observable<BaseBean<MonitoringPointDetailsBean>> getPointById(@Field("id") String id);
 
     /**
      * 获取告警信息

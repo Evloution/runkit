@@ -249,6 +249,7 @@
                         </RelativeLayout>
 
                         <RelativeLayout
+                            android:id="@+id/fragment_homepage_warning_rl"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"

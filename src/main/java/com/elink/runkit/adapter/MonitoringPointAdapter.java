@@ -22,15 +22,21 @@ import butterknife.ButterKnife;
  * @email 15227318030@163.com
  * @description 监测点列表的adapter
  */
-public class MonitoringPointAdapter extends BaseAdapter {
+public class MonitoringPointAdapter extends BaseAdapter implements View.OnClickListener {
 
     private Context context;
     private List<MonitoringPointBean> monitoringPointBeans;
     private LayoutInflater mInflater;
+    private MonitoringPointCallback monitoringPointCallback;
 
-    public MonitoringPointAdapter(Context context, List<MonitoringPointBean> monitoringPointBeans) {
+    public interface MonitoringPointCallback {
+        void click(View view);
+    }
+
+    public MonitoringPointAdapter(Context context, List<MonitoringPointBean> monitoringPointBeans, MonitoringPointCallback monitoringPointCallback) {
         this.context = context;
         this.monitoringPointBeans = monitoringPointBeans;
+        this.monitoringPointCallback = monitoringPointCallback;
         this.mInflater = LayoutInflater.from(context);
     }
 
@@ -67,7 +73,14 @@ public class MonitoringPointAdapter extends BaseAdapter {
         viewHolder.itemDevicemonitoringDeviceMonipauseTxt.setText(String.valueOf(monitoringPointBeans.get(position).MONIPAUSE)); // 监测点是否还在监测
         viewHolder.itemDevicemonitoringDeviceIpandportTxt.setText(monitoringPointBeans.get(position).IP + ":" + String.valueOf(monitoringPointBeans.get(position).PORT)); // ip 和 port
         viewHolder.itemDevicemonitoringDeviceEventtimeTxt.setText(monitoringPointBeans.get(position).EVENTTIME); // 事件的时间
+        viewHolder.itemDevicemonitoringDeviceDetailsLl.setOnClickListener(this);
+        viewHolder.itemDevicemonitoringDeviceDetailsLl.setTag(position);
         return convertView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        monitoringPointCallback.click(v);
     }
 
     static class ViewHolder {
@@ -89,6 +102,8 @@ public class MonitoringPointAdapter extends BaseAdapter {
         TextView itemDevicemonitoringDeviceIpandportTxt; // ip 和 port
         @BindView(R.id.item_devicemonitoring_device_eventtime_txt)
         TextView itemDevicemonitoringDeviceEventtimeTxt; // 事件的时间
+        @BindView(R.id.item_devicemonitoring_device_details_ll)
+        LinearLayout itemDevicemonitoringDeviceDetailsLl; // 详情
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

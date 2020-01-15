@@ -1,5 +1,6 @@
 package com.elink.runkit.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,6 +22,8 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.elink.runkit.R;
+import com.elink.runkit.activity.DeviceMonitoringDetailsActivity;
+import com.elink.runkit.adapter.MapClickEventsAdapter;
 import com.elink.runkit.adapter.MonitoringPointAdapter;
 import com.elink.runkit.bean.BaseDataListBean;
 import com.elink.runkit.bean.MonitoringPointBean;
@@ -93,6 +96,7 @@ public class DeviceMonitoringFragment extends Fragment {
 
     private void initView() {
         monitoringPointList = new ArrayList<>();
+        monitoringPointPresenter = new MonitoringPointPresenter(getContext());
         //初始化地图控制器对象
         if (aMap == null) {
             aMap = fragmentDevicemonitoringMapview.getMap();
@@ -101,23 +105,6 @@ public class DeviceMonitoringFragment extends Fragment {
         aMap.showIndoorMap(true); // 是否显示室内地图。 true：显示室内地图；false：不显示；
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是 false。
         aMap.moveCamera(CameraUpdateFactory.zoomTo(10)); // 设置地图缩放比例
-        //设置自定义弹窗
-        //aMap.setInfoWindowAdapter(new WindowAdapter(this, monitoringPointList));
-        //绑定信息窗点击事件
-        //aMap.setOnInfoWindowClickListener(new WindowAdapter(this));
-        // 设置maker点击时的响应
-        //aMap.setOnMarkerClickListener(new WindowAdapter(this));
-        // 地图的滑动监听
-        // aMap.setOnCameraChangeListener(onCameraChangeListener);
-        // 设置点击 地图的点击事件
-        /*aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                marker.hideInfoWindow();
-            }
-        });*/
-
-        monitoringPointPresenter = new MonitoringPointPresenter(getContext());
 
         // 下拉刷新
         swiperefreshlayout.setColorSchemeResources(R.color.colorPrimary, R.color.blueness_two, R.color.blueness_three);
@@ -144,6 +131,7 @@ public class DeviceMonitoringFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 L.e("点击的是：" + monitoringPointList.get(position).ID);
+                loadMarker(monitoringPointList, 1, position);
             }
         });
     }
@@ -169,9 +157,27 @@ public class DeviceMonitoringFragment extends Fragment {
                 // 第一次加载数据和下拉刷新时走这里
                 if ("1".equals(page) || page == "1") {
                     // 这个判断是为了只创建一次 MonitoringPointAdapter对象，如果上拉加载时再次走这里的话会直接弹回顶部。
-                    monitoringPointAdapter = new MonitoringPointAdapter(getContext(), monitoringPointList);
+                    monitoringPointAdapter = new MonitoringPointAdapter(getContext(), monitoringPointList, new MonitoringPointAdapter.MonitoringPointCallback() {
+                        @Override
+                        public void click(View view) {
+                            final int position = (Integer) view.getTag();
+                            /**
+                             * 详情按钮的点击事件
+                             * @param view
+                             */
+                            switch (view.getId()) {
+                                case R.id.item_devicemonitoring_device_details_ll:
+                                    Intent intent = new Intent();
+                                    intent.setClass(getActivity(), DeviceMonitoringDetailsActivity.class);
+                                    intent.putExtra("monitoringId", monitoringPointList.get(position).ID);
+                                    startActivity(intent);
+                                    break;
+                            }
+                        }
+                    });
                     devicelistListview.setAdapter(monitoringPointAdapter);
                 }
+                // 更新地图上点的数据
                 updateNormalMarkers(monitoringPointList);
                 // 请求成功后取消刷新框
                 isCloseLoad(code);
@@ -195,6 +201,73 @@ public class DeviceMonitoringFragment extends Fragment {
 
             }
         });
+    }
+
+    /**
+     * 更新地图上点的数据
+     */
+    private void updateNormalMarkers(List<MonitoringPointBean> monitoringPointList) {
+        L.e("monitoringPointList:" + monitoringPointList);
+        // 判断上一次更新marker操作的操作类型,若上次显示的是聚合网点,则先清空地图,然后清空网点信息,在刷新地图marker
+        aMap.clear();
+        markerMap.clear();
+        //设置自定义弹窗
+        aMap.setInfoWindowAdapter(new MapClickEventsAdapter(getContext(), monitoringPointList));
+        // 设置maker点击时的响应
+        aMap.setOnMarkerClickListener(new MapClickEventsAdapter(getContext()));
+        // 设置点击 地图的点击事件
+        aMap.setOnMapClickListener(new AMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                marker.hideInfoWindow();
+            }
+        });
+        loadMarker(monitoringPointList, 0, 0);
+    }
+
+    /**
+     * 初始化marker数据
+     */
+    private void loadMarker(List<MonitoringPointBean> monitoringPointBeanList, int code, int postion) {
+        LatLng latLng = null;
+        if (monitoringPointBeanList == null || monitoringPointBeanList.size() == 0) {
+            return;
+        }
+        L.e("monitoringPointBeanList:" + monitoringPointBeanList.get(postion).NAME);
+        if (code == 1) { // code 等于 1 说明是点击的列表后走进这个方法
+            L.e("getLATITUDE()：" + monitoringPointBeanList.get(postion).getLATITUDE());
+            L.e("getLONGITUDE()" + monitoringPointBeanList.get(postion).getLONGITUDE());
+            latLng = new LatLng(monitoringPointBeanList.get(postion).getLATITUDE(), monitoringPointBeanList.get(postion).getLONGITUDE());
+            MarkerOptions options = new MarkerOptions();
+            options.anchor(0.5f, 1.0f);
+            options.position(latLng);
+            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_black_green_24dp));
+
+            marker = aMap.addMarker(options);
+            marker.setObject(monitoringPointBeanList);
+            marker.setZIndex(ORGZOON);
+            marker.setPeriod(postion);
+
+            // 点击列表后根据经纬度将地图缩放比例调到15
+            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+            marker.showInfoWindow();
+        } else {
+            for (int i = 0; i < monitoringPointBeanList.size(); i++) {
+                MonitoringPointBean monitoringPointBean = monitoringPointBeanList.get(i);
+                L.e("getLATITUDE()：" + monitoringPointBean.getLATITUDE());
+                L.e("getLONGITUDE():" + monitoringPointBean.getLONGITUDE());
+                latLng = new LatLng(monitoringPointBean.getLATITUDE(), monitoringPointBean.getLONGITUDE());
+                MarkerOptions options = new MarkerOptions();
+                options.anchor(0.5f, 1.0f);
+                options.position(latLng);
+                options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_black_green_24dp));
+
+                marker = aMap.addMarker(options);
+                marker.setObject(monitoringPointBean);
+                marker.setZIndex(ORGZOON);
+                marker.setPeriod(postion);
+            }
+        }
     }
 
     /**
@@ -227,47 +300,6 @@ public class DeviceMonitoringFragment extends Fragment {
                 break;
             case R.id.search_img: // 搜索按钮
                 break;
-        }
-    }
-
-    /**
-     * 更新普通网点数据
-     */
-    private void updateNormalMarkers(List<MonitoringPointBean> monitoringPointList) {
-        // 判断上一次更新marker操作的操作类型,若上次显示的是聚合网点,则先清空地图,然后清空网点信息,在刷新地图marker
-        aMap.clear();
-        markerMap.clear();
-
-        loadMarker(monitoringPointList, 0, 0);
-    }
-
-    /**
-     * 初始化marker数据
-     */
-    private void loadMarker(List<MonitoringPointBean> monitoringPointBeanList, int code, int postion) {
-        LatLng latLng = null;
-        if (monitoringPointBeanList == null || monitoringPointBeanList.size() == 0) {
-            return;
-        }
-        for (int i = 0; i < monitoringPointBeanList.size(); i++) {
-            MonitoringPointBean monitoringPointBean = monitoringPointBeanList.get(i);
-            L.e("getLATITUDE()：" + monitoringPointBean.getLATITUDE());
-            L.e("getLONGITUDE()" + monitoringPointBean.getLONGITUDE());
-            latLng = new LatLng(monitoringPointBean.getLATITUDE(), monitoringPointBean.getLONGITUDE());
-            MarkerOptions options = new MarkerOptions();
-            options.anchor(0.5f, 1.0f);
-            options.position(latLng);
-            options.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_black_green_24dp));
-
-            marker = aMap.addMarker(options);
-            marker.setObject(monitoringPointBean);
-            marker.setZIndex(ORGZOON);
-            marker.setPeriod(postion);
-        }
-        if (code == 1) { // code 等于 1 说明是点击的列表后走进这个方法
-            // 点击列表后根据经纬度将地图缩放比例调到15
-            aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-            marker.showInfoWindow();
         }
     }
 

@@ -1,8 +1,6 @@
 package com.elink.runkit.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.elink.runkit.R;
@@ -62,6 +61,8 @@ public class HomePageFragment extends Fragment {
     @BindView(R.id.swiperefreshlayout)
     SwipeRefreshLayout swiperefreshlayout; // 下拉刷新
     Unbinder unbinder;
+    @BindView(R.id.fragment_homepage_warning_rl)
+    RelativeLayout fragmentHomepageWarningRl;
 
 
     private Fragment fragment = new Fragment();
@@ -70,21 +71,8 @@ public class HomePageFragment extends Fragment {
     private FragmentManager fm;
     private FragmentTransaction ft;
 
+    private OnReportPoliceClick onReportPoliceClick = null;
     private PointsInfoPresenter pointsInfoPresenter = null;
-
-    private Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case 0:
-                    //为了保险起见可以先判断当前是否在刷新中（旋转的小圈圈在旋转）....
-                    if (swiperefreshlayout.isRefreshing()) {
-                        //关闭刷新动画
-                        swiperefreshlayout.setRefreshing(false);
-                    }
-                    break;
-            }
-        }
-    };
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -154,7 +142,8 @@ public class HomePageFragment extends Fragment {
                 fragmentHomepageWarningnumberTxt.setTextColor(getResources().getColor(R.color.red));
                 fragmentHomepageHostonlineratenumberTxt.setText(String.valueOf(TBean.data.PERCENT));
                 Constants.DEVICES_ONLINE = Double.valueOf(TBean.data.PERCENT); // 将在线率赋给常量
-                mHandler.sendEmptyMessageDelayed(0, 0);
+                // 请求成功后取消刷新框
+                isCloseLoad();
             }
 
             @Override
@@ -162,7 +151,8 @@ public class HomePageFragment extends Fragment {
                 L.e("onError：" + error);
                 fragmentHomepageReloadLinearlayout.setVisibility(View.VISIBLE);
                 fragmentHomepageLinearlayout.setVisibility(View.GONE);
-                mHandler.sendEmptyMessageDelayed(0, 0);
+                // 请求成功后取消刷新框
+                isCloseLoad();
             }
 
             @Override
@@ -177,7 +167,7 @@ public class HomePageFragment extends Fragment {
         });
     }
 
-    @OnClick({R.id.fragment_homepage_reload_btn, R.id.fragment_homepage_onlinerate_btn, R.id.fragment_homepage_statistics_btn})
+    @OnClick({R.id.fragment_homepage_reload_btn, R.id.fragment_homepage_onlinerate_btn, R.id.fragment_homepage_statistics_btn, R.id.fragment_homepage_warning_rl})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.fragment_homepage_reload_btn: // 重新加载数据按钮
@@ -195,6 +185,11 @@ public class HomePageFragment extends Fragment {
                 togglepagesOnLineRateBtn.setBackground(getResources().getDrawable(R.drawable.fragment_homepage_onlinerate_btn_normal_bg));
                 togglepagesOnLineRateBtn.setTextColor(getResources().getColor(R.color.colorPrimary));
                 switchFragment(echartsDataPieFragment);
+                break;
+            case R.id.fragment_homepage_warning_rl: // 警告数按钮
+                if (onReportPoliceClick != null) {
+                    onReportPoliceClick.onReportPoliceClick(fragmentHomepageWarningRl);
+                }
                 break;
         }
     }
@@ -217,6 +212,18 @@ public class HomePageFragment extends Fragment {
     }
 
     /**
+     * 关闭下拉刷新框
+     */
+    private void isCloseLoad() {
+        // 下拉刷新
+        //为了保险起见可以先判断当前是否在刷新中（旋转的小圈圈在旋转）....
+        if (swiperefreshlayout.isRefreshing()) {
+            //关闭刷新动画
+            swiperefreshlayout.setRefreshing(false);
+        }
+    }
+
+    /**
      * 分类统计背景为蓝色，总体在线率按钮为白色
      */
     private void onlineRateDefaultBtn() {
@@ -224,6 +231,21 @@ public class HomePageFragment extends Fragment {
         togglepagesOnLineRateBtn.setTextColor(getResources().getColor(R.color.white));
         togglepagesStatisticsBtn.setBackground(getResources().getDrawable(R.drawable.fragment_homepage_statistics_btn_normal_bg));
         togglepagesStatisticsBtn.setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
+    //定义接口变量的get方法
+    public OnReportPoliceClick getOnReportPoliceClick() {
+        return onReportPoliceClick;
+    }
+
+    //定义接口变量的set方法
+    public void setOnReportPoliceClick(OnReportPoliceClick onReportPoliceClick) {
+        this.onReportPoliceClick = onReportPoliceClick;
+    }
+
+    //1、定义接口
+    public interface OnReportPoliceClick {
+        void onReportPoliceClick(View view);
     }
 
     @Override

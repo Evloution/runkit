@@ -6,6 +6,7 @@ import com.elink.runkit.bean.BaseBean;
 import com.elink.runkit.bean.BaseDataListBean;
 import com.elink.runkit.bean.HistogramBean;
 import com.elink.runkit.bean.MonitoringPointBean;
+import com.elink.runkit.bean.MonitoringPointDetailsBean;
 import com.elink.runkit.bean.PointsInfoBean;
 import com.elink.runkit.bean.ReportPoliceBean;
 import com.elink.runkit.retrofit.RetrofitApi;
@@ -47,6 +48,7 @@ public class DataModel {
     }
 
     /**
+     * 获取监测点列表
      * @param pointname 设备名称
      * @param pointip   设备ip
      * @param limit     显示几条数据
@@ -55,6 +57,15 @@ public class DataModel {
      */
     public Observable<BaseDataListBean<MonitoringPointBean>> getPointListObservable(String pointname, String pointip, String limit, String page) {
         return retrofitApi.getPointList(pointname, pointip, limit, page);
+    }
+
+    /**
+     * 监测点详情信息
+     * @param id 监测点的id
+     * @return
+     */
+    public Observable<BaseBean<MonitoringPointDetailsBean>> getPointByIdObservable(String id) {
+        return retrofitApi.getPointById(id);
     }
 
     /**
