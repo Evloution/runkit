@@ -8,27 +8,26 @@ package com.elink.runkit.bean;
  */
 public class MonitoringPointDetailsBean {
 
+
     /**
-     * BOTYPEID : d56d3b4d3c875cd19621e9496fd29873
-     * CREATED_TIME : 2019-10-28 15:34:28
+     * BOTYPEID : b26bf834e27b557aa19022a940fd28cd
      * DESCR : null
-     * EVENTID : 5362e8f48c9647a5991d3b4fbd7435c1
      * HEARTID : null
-     * ID : 826
-     * IP : 13.111.18.54
+     * ID : 796
+     * IP : 13.111.18.27
      * ISPRIMARY : 1
-     * LATITUDE : 37.06216
-     * LONGITUDE : 114.484283
+     * LATITUDE : null
+     * LONGITUDE : null
      * MAKENAME : null
      * MONIINTERVAL : 3600
      * MONIPAUSE : 0
-     * MONITYPE : 0
-     * NAME : 中兴大街-育才路南卡口
+     * MONITYPE : ping
+     * NAME : 中兴大街-守敬路北抓拍2
      * PCODE : null
-     * POINTTYPE : 1
+     * POINTTYPE : 电警
      * PORT : 0
-     * ROAD : 育才路
-     * ROADCODE : 61
+     * ROAD : 守敬路
+     * ROADCODE : 18
      * SECRETKEY : null
      * STATUS : 0
      * STREET : 中兴大街
@@ -38,22 +37,20 @@ public class MonitoringPointDetailsBean {
      */
 
     public String BOTYPEID;
-    public String CREATED_TIME;
     public Object DESCR;
-    public String EVENTID;
     public Object HEARTID;
     public String ID;
     public String IP;
     public int ISPRIMARY;
-    public double LATITUDE;
-    public double LONGITUDE;
+    public Object LATITUDE;
+    public Object LONGITUDE;
     public Object MAKENAME;
     public int MONIINTERVAL;
     public int MONIPAUSE;
-    public int MONITYPE;
+    public String MONITYPE;
     public String NAME;
     public Object PCODE;
-    public int POINTTYPE;
+    public String POINTTYPE;
     public int PORT;
     public String ROAD;
     public String ROADCODE;
@@ -72,28 +69,12 @@ public class MonitoringPointDetailsBean {
         this.BOTYPEID = BOTYPEID;
     }
 
-    public String getCREATED_TIME() {
-        return CREATED_TIME;
-    }
-
-    public void setCREATED_TIME(String CREATED_TIME) {
-        this.CREATED_TIME = CREATED_TIME;
-    }
-
     public Object getDESCR() {
         return DESCR;
     }
 
     public void setDESCR(Object DESCR) {
         this.DESCR = DESCR;
-    }
-
-    public String getEVENTID() {
-        return EVENTID;
-    }
-
-    public void setEVENTID(String EVENTID) {
-        this.EVENTID = EVENTID;
     }
 
     public Object getHEARTID() {
@@ -128,19 +109,19 @@ public class MonitoringPointDetailsBean {
         this.ISPRIMARY = ISPRIMARY;
     }
 
-    public double getLATITUDE() {
+    public Object getLATITUDE() {
         return LATITUDE;
     }
 
-    public void setLATITUDE(double LATITUDE) {
+    public void setLATITUDE(Object LATITUDE) {
         this.LATITUDE = LATITUDE;
     }
 
-    public double getLONGITUDE() {
+    public Object getLONGITUDE() {
         return LONGITUDE;
     }
 
-    public void setLONGITUDE(double LONGITUDE) {
+    public void setLONGITUDE(Object LONGITUDE) {
         this.LONGITUDE = LONGITUDE;
     }
 
@@ -168,11 +149,11 @@ public class MonitoringPointDetailsBean {
         this.MONIPAUSE = MONIPAUSE;
     }
 
-    public int getMONITYPE() {
+    public String getMONITYPE() {
         return MONITYPE;
     }
 
-    public void setMONITYPE(int MONITYPE) {
+    public void setMONITYPE(String MONITYPE) {
         this.MONITYPE = MONITYPE;
     }
 
@@ -192,11 +173,11 @@ public class MonitoringPointDetailsBean {
         this.PCODE = PCODE;
     }
 
-    public int getPOINTTYPE() {
+    public String getPOINTTYPE() {
         return POINTTYPE;
     }
 
-    public void setPOINTTYPE(int POINTTYPE) {
+    public void setPOINTTYPE(String POINTTYPE) {
         this.POINTTYPE = POINTTYPE;
     }
 

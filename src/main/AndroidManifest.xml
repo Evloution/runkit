@@ -33,6 +33,7 @@
         </activity>
 
         <activity android:name=".activity.DeviceMonitoringDetailsActivity" />
+        <activity android:name=".activity.MonitoringSearchActivity" />
 
         <!-- 高德地图的key -->
         <meta-data

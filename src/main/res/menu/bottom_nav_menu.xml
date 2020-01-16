@@ -17,6 +17,11 @@
         android:title="@string/title_notifications" />
 
     <item
+        android:id="@+id/navigation_reportPoliceLog"
+        android:icon="@drawable/ic_local_library_black_24dp"
+        android:title="@string/title_reportPoliceLog" />
+
+    <item
         android:id="@+id/navigation_myPage"
         android:icon="@drawable/ic_person_black_24dp"
         android:title="@string/title_myPage" />

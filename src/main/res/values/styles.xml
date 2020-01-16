@@ -26,4 +26,9 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <!-- EditText下划线框的颜色 -->
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/gray_three</item>
+    </style>
+
 </resources>

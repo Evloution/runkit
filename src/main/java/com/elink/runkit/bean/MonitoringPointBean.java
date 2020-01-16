@@ -7,19 +7,20 @@ package com.elink.runkit.bean;
  * @description 监测点列表的 Bean
  */
 public class MonitoringPointBean {
-    
+
+
     /**
-     * EVENTTIME : 2020-01-13 15:55:00
-     * ID : 802
-     * IP : 13.111.18.33
+     * EVENTTIME : 2020-01-16 11:13:56
+     * ID : 796
+     * IP : 13.111.18.27
      * ISPRIMARY : 1
      * LATITUDE : null
      * LONGITUDE : null
      * MONIINTERVAL : 3600
      * MONIPAUSE : 0
-     * MONITYPE : 0
-     * NAME : 中兴大街-守敬路西卡口1
-     * POINTTYPE : 1
+     * MONITYPE : ping
+     * NAME : 中兴大街-守敬路北抓拍2
+     * POINTTYPE : 电警
      * PORT : 0
      * ROWNUM_ : 1
      * STATUS : 0
@@ -34,29 +35,13 @@ public class MonitoringPointBean {
     public double LONGITUDE;
     public int MONIINTERVAL;
     public int MONIPAUSE;
-    public int MONITYPE;
+    public String MONITYPE;
     public String NAME;
-    public int POINTTYPE;
+    public String POINTTYPE;
     public int PORT;
     public int ROWNUM_;
     public int STATUS;
     public int WARNGRADE;
-
-    public double getLATITUDE() {
-        return LATITUDE;
-    }
-
-    public void setLATITUDE(double LATITUDE) {
-        this.LATITUDE = LATITUDE;
-    }
-
-    public double getLONGITUDE() {
-        return LONGITUDE;
-    }
-
-    public void setLONGITUDE(double LONGITUDE) {
-        this.LONGITUDE = LONGITUDE;
-    }
 
     public String getEVENTTIME() {
         return EVENTTIME;
@@ -90,6 +75,22 @@ public class MonitoringPointBean {
         this.ISPRIMARY = ISPRIMARY;
     }
 
+    public double getLATITUDE() {
+        return LATITUDE;
+    }
+
+    public void setLATITUDE(double LATITUDE) {
+        this.LATITUDE = LATITUDE;
+    }
+
+    public double getLONGITUDE() {
+        return LONGITUDE;
+    }
+
+    public void setLONGITUDE(double LONGITUDE) {
+        this.LONGITUDE = LONGITUDE;
+    }
+
     public int getMONIINTERVAL() {
         return MONIINTERVAL;
     }
@@ -106,11 +107,11 @@ public class MonitoringPointBean {
         this.MONIPAUSE = MONIPAUSE;
     }
 
-    public int getMONITYPE() {
+    public String getMONITYPE() {
         return MONITYPE;
     }
 
-    public void setMONITYPE(int MONITYPE) {
+    public void setMONITYPE(String MONITYPE) {
         this.MONITYPE = MONITYPE;
     }
 
@@ -122,11 +123,11 @@ public class MonitoringPointBean {
         this.NAME = NAME;
     }
 
-    public int getPOINTTYPE() {
+    public String getPOINTTYPE() {
         return POINTTYPE;
     }
 
-    public void setPOINTTYPE(int POINTTYPE) {
+    public void setPOINTTYPE(String POINTTYPE) {
         this.POINTTYPE = POINTTYPE;
     }
 

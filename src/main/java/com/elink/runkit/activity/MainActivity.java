@@ -15,6 +15,7 @@ import com.elink.runkit.fragment.DeviceMonitoringFragment;
 import com.elink.runkit.fragment.HomePageFragment;
 import com.elink.runkit.fragment.MyPageFragment;
 import com.elink.runkit.fragment.ReportPoliceFragment;
+import com.elink.runkit.fragment.ReportPoliceLogFragment;
 import com.elink.runkit.log.L;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private DeviceMonitoringFragment deviceMonitoringFragment;
     private MyPageFragment myPageFragment;
     private ReportPoliceFragment reportPoliceFragment;
+    private ReportPoliceLogFragment reportPoliceLogFragment;
     private FragmentManager fm;
     private FragmentTransaction ft;
     private BottomNavigationView navView;
@@ -42,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_reportPolice:
                     switchFragment(reportPoliceFragment);
+                    return true;
+                case R.id.navigation_reportPoliceLog:
+                    switchFragment(reportPoliceLogFragment);
                     return true;
                 case R.id.navigation_myPage:
                     switchFragment(myPageFragment);
@@ -68,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         deviceMonitoringFragment = new DeviceMonitoringFragment();
         myPageFragment = new MyPageFragment();
         reportPoliceFragment = new ReportPoliceFragment();
+        reportPoliceLogFragment = new ReportPoliceLogFragment();
 
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();

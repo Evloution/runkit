@@ -9,6 +9,7 @@ import com.elink.runkit.bean.MonitoringPointBean;
 import com.elink.runkit.bean.MonitoringPointDetailsBean;
 import com.elink.runkit.bean.PointsInfoBean;
 import com.elink.runkit.bean.ReportPoliceBean;
+import com.elink.runkit.bean.ReportPoliceLogEventBean;
 import com.elink.runkit.retrofit.RetrofitApi;
 import com.elink.runkit.retrofit.RetrofitHelper;
 
@@ -85,5 +86,16 @@ public class DataModel {
      */
     public Observable<BaseBean> confirmWarnObservable(String id) {
         return retrofitApi.confirmWarn(id);
+    }
+
+    /**
+     * 查看告警日志
+     * @param pointname 设备名称
+     * @param limit     显示几条数据
+     * @param page      请求几页数据
+     * @return
+     */
+    public Observable<BaseDataListBean<ReportPoliceLogEventBean>> getEventListObservable(String pointname, String limit, String page) {
+        return retrofitApi.getEventList(pointname, limit, page);
     }
 }

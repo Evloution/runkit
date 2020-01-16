@@ -7,6 +7,7 @@ import com.elink.runkit.bean.MonitoringPointBean;
 import com.elink.runkit.bean.MonitoringPointDetailsBean;
 import com.elink.runkit.bean.PointsInfoBean;
 import com.elink.runkit.bean.ReportPoliceBean;
+import com.elink.runkit.bean.ReportPoliceLogEventBean;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
@@ -22,11 +23,11 @@ import retrofit2.http.POST;
 public interface RetrofitApi {
 
     // 获取监测点数目
-    @POST("connector/getPointsInfo")
+    @POST("appController/getPointsInfo")
     Observable<BaseBean<PointsInfoBean>> getPointsInfo();
 
     // 获取首页图表数据
-    @POST("connector/getHistogramList")
+    @POST("appController/getHistogramList")
     @FormUrlEncoded
     Observable<BaseBean<HistogramBean>> getHistogramList(@Field("pointType") String pointType);
 
@@ -38,7 +39,7 @@ public interface RetrofitApi {
      * @param page 请求几页数据
      * @return
      */
-    @POST("connector/getPointList")
+    @POST("appController/getPointList")
     @FormUrlEncoded
     Observable<BaseDataListBean<MonitoringPointBean>> getPointList(@Field("pointname") String pointname, @Field("pointip") String pointip, @Field("limit") String limit, @Field("page") String page);
 
@@ -47,7 +48,7 @@ public interface RetrofitApi {
      * @param id 监测点的id
      * @return
      */
-    @POST("connector/getPointById")
+    @POST("appController/getPointById")
     @FormUrlEncoded
     Observable<BaseBean<MonitoringPointDetailsBean>> getPointById(@Field("id") String id);
 
@@ -57,7 +58,7 @@ public interface RetrofitApi {
      * @param page      请求几页数据
      * @return
      */
-    @POST("connector/getWarnList")
+    @POST("appController/getWarnList")
     @FormUrlEncoded
     Observable<BaseDataListBean<ReportPoliceBean>> getWarnList(@Field("limit") String limit, @Field("page") String page);
 
@@ -66,7 +67,18 @@ public interface RetrofitApi {
      * @param id 告警记录的id
      * @return
      */
-    @POST("connector/confirmWarn")
+    @POST("appController/confirmWarn")
     @FormUrlEncoded
     Observable<BaseBean> confirmWarn(@Field("id") String id);
+
+    /**
+     * 查看日志信息
+     * @param pointName
+     * @param limit     显示几条数据
+     * @param page      请求几页数据
+     * @return
+     */
+    @POST("appController/getEventList")
+    @FormUrlEncoded
+    Observable<BaseDataListBean<ReportPoliceLogEventBean>> getEventList(@Field("pointName") String pointName, @Field("limit") String limit, @Field("page") String page);
 }

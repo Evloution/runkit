@@ -83,7 +83,7 @@ public class DeviceMonitoringDetailsActivity extends AppCompatActivity {
                 devicedetailsMonipauseTxt.setText(String.valueOf(TBean.data.MONIPAUSE));
                 devicedetailsStatusTxt.setText(String.valueOf(TBean.data.STATUS));
                 devicedetailsWarngradeTxt.setText(String.valueOf(TBean.data.WARNGRADE));
-                devicedetailsMonitypeTxt.setText(String.valueOf(TBean.data.MONITYPE));
+                devicedetailsMonitypeTxt.setText(TBean.data.MONITYPE);
                 devicedetailsMoniintervalTxt.setText(String.valueOf(TBean.data.MONIINTERVAL));
             }
 

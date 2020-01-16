@@ -23,6 +23,7 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.elink.runkit.R;
 import com.elink.runkit.activity.DeviceMonitoringDetailsActivity;
+import com.elink.runkit.activity.MonitoringSearchActivity;
 import com.elink.runkit.adapter.MapClickEventsAdapter;
 import com.elink.runkit.adapter.MonitoringPointAdapter;
 import com.elink.runkit.bean.BaseDataListBean;
@@ -299,6 +300,7 @@ public class DeviceMonitoringFragment extends Fragment {
             case R.id.fragment_devicemonitoring_reload_btn: // 重新加载数据按钮
                 break;
             case R.id.search_img: // 搜索按钮
+                startActivity(new Intent(getContext(), MonitoringSearchActivity.class));
                 break;
         }
     }

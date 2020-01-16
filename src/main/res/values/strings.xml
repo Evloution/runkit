@@ -3,6 +3,7 @@
     <string name="title_home">首页</string>
     <string name="title_dashboard">设备监控</string>
     <string name="title_notifications">告警</string>
+    <string name="title_reportPoliceLog">日志</string>
     <string name="title_myPage">我的</string>
 
     <string name="fragment_home_tacit_txt">个</string>

@@ -12,5 +12,4 @@ public class Constants {
 
     // 设备在线率
     public static double DEVICES_ONLINE = 0;
-    public static String ITEMICONSIZE = "";
 }
